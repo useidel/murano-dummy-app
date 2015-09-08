@@ -1,0 +1,19 @@
+FormatVersion: 2.0.0
+Version: 1.0.0
+Name: Deploy MyApp
+
+Parameters:
+  enableDEBUG: $enableDEBUG
+
+Body: |
+  return myappDeploy('{0}'.format(args.enableDEBUG)).stdout
+
+Scripts:
+  myappDeploy:
+    Type: Application
+    Version: 1.0.0
+    EntryPoint: runMyAppDeploy.sh
+    Files: []
+    Options:
+      captureStdout: true
+      captureStderr: true

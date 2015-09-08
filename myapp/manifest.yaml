@@ -1,0 +1,10 @@
+Format: 1.0
+Type: Application
+FullName: io.murano.apps.myapp
+Name: Dummy Application MyApp
+Description: |
+ This is just a simple Dummy Application to be used for learning how to build Murano packages.
+Author: Udo Seidel
+Tags: [Dummy, Application]
+Classes:
+ io.murano.apps.myapp: MyApp.yaml

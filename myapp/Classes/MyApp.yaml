@@ -1,0 +1,39 @@
+Namespaces:
+  =: io.murano.apps.myapp
+  std: io.murano
+  res: io.murano.resources
+  sys: io.murano.system
+
+Name: MyApp
+
+Extends: std:Application
+
+Properties:
+  name:
+    Contract: $.string().notNull()
+
+  enablePHP:
+    Contract: $.bool()
+    Default: false
+
+  instance:
+    Contract: $.class(res:Instance).notNull()
+
+Methods:
+  initialize:
+    Body:
+      - $._environment: $.find(std:Environment).require()
+
+  deploy:
+    Body:
+      - If: not $.getAttr(deployed, false)
+        Then:
+          - $._environment.reporter.report($this, 'Creating VM for MyApp.')
+          - $.instance.deploy()
+          - $resources: new(sys:Resources)
+          - $template: $resources.yaml('DeployApache.template').bind(dict(enablePHP => $.enablePHP))
+          - $._environment.reporter.report($this, 'Instance is created. Deploying MyApp')
+          - $.instance.agent.call($template, $resources)
+          - $._environment.reporter.report($this, 'MyApp is installed.')
+          - $.setAttr(deployed, true)
+
